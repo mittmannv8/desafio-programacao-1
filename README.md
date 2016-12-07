@@ -1,7 +1,7 @@
 # Resolução do desafio
 O desafio foi resolvido utilizando:
- -Python 3.4
- -Django 1.10.4
+- Python 3.4
+- Django 1.10.4
 
 ## Instalação e execução
 Para rodar o projeto, considerando que o ambiente esteja preparado com *Python >3.4*, rode o comando:
@@ -29,6 +29,7 @@ Caso queira rodar os testes:
     $ make test
 
 ou:
+
     $ python manage.py test
 
 # Desafio de programação 1
