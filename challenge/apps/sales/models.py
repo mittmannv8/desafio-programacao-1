@@ -1,15 +1,27 @@
 from __future__ import unicode_literals
-
 from django.db import models
 
 
+class Document(models.Model):
+    """
+        Class representing the block of sales, originating from file.
+        This class is util for grouping sales by file
+    """
+    created_date = models.DateTimeField(auto_now_add=True)
+
+
 class Sale(models.Model):
+    """
+        Class representing each sale of Document (file containing the sale's
+        information)
+    """
     purchaser_name = models.CharField('Purchaser name', max_length=50)
     item_description = models.CharField('Item description', max_length=50)
     item_price = models.FloatField('Item price')
     purchase_count = models.IntegerField('Purcharse count')
     merchant_address = models.CharField('Merchart address', max_length=50)
     merchant_name = models.CharField('Nerchant name', max_length=50)
+    document = models.ForeignKey(Document, on_delete=models.CASCADE)
 
     @property
     def total_price(self):
