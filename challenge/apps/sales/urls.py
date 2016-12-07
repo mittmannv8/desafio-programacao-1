@@ -3,5 +3,6 @@ from challenge.apps.sales import views
 
 
 urlpatterns = [
-    url(r'^$', views.SalesFileView.as_view(), name='saleIndex'),
+    url(r'^$', views.IndexSales.as_view(), name='sale_index'),
+    url(r'^new/$', views.NewSalesFile.as_view(), name='new_sale'),
 ]

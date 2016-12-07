@@ -1,15 +1,28 @@
+import operator
+
+from functools import reduce
 from challenge.apps.sales.forms import FileSaleForm
-from django.views import View
-from django.http import HttpResponse
-from django.shortcuts import render
 from challenge.apps.sales.models import Sale
+from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.views import View
 
 
-class SalesFileView(View):
-    def get(self, request, *args, **kwargs):
-        form = FileSaleForm()
-        return render(request, 'sales/sales_form.html', {'form': form})
+class IndexSales(View):
+    def get(self, request):
+        sale_file = FileSaleForm()
+        sales = Sale.objects.all()
 
+        gross_sales = reduce(operator.add, [s.total_price for s in sales])
+
+        return render(request, 'sales/index.html', {
+            'gross_sales': gross_sales,
+            'form': sale_file
+        })
+
+
+class NewSalesFile(View):
     def post(self, request, *args, **kwargs):
         form = FileSaleForm(request.POST, request.FILES)
 
@@ -18,7 +31,7 @@ class SalesFileView(View):
             for index, line in enumerate(file.readlines()):
                 line = line.decode('utf-8')
                 values = line.split('\t')
-                print(values[0])
+
                 if index > 0:
                     Sale.objects.create(
                        purchaser_name=values[0],
@@ -28,6 +41,6 @@ class SalesFileView(View):
                        merchant_address=values[4],
                        merchant_name=values[5],
                     )
-            return HttpResponse('OK')
+            return HttpResponseRedirect('/sales/')
         else:
             return HttpResponse('error')
