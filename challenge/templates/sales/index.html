@@ -1,12 +1,31 @@
 {% extends 'base.html' %}
+{% load humanize %}
 
 {% block content %}
+    
+    {% if last_document %}
+    <div class="demonstrative">
+        
+    {% if last_document.parse_complete %}
+        <h3>Receita bruta do último documento <small>(upload em: {{ last_document.created_date }})</small></h3>
+    {% else %}
+        <h3>Receita bruta parcial do último documento <small>(Analise dos dados em andamento. Atualize o navegador para atualizar o valor)</small></h3>
+    {% endif %}
+        <span class="currency">$ {{last_gross_sales|floatformat:2|intcomma}}</span>
+    </div>
+    {% endif %}
 
-    {{gross_sales}}
+    <div class="demonstrative">
+        <h3>Receita bruta total</h3>
+        <span class="currency">$ {{gross_sales|floatformat:2|intcomma}}</span>
+    </div>
 
-    <form action="/sales/new/" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Enviar">
-    </form>
+    <div class="file-upload">
+        <p>Faça o upload do arquivo contendo os dados de vendas:</p>
+        <form action="/sales/new/" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="sales_file" id="file" class="inputfile" /><br />
+            <input type="submit" id="send-file" value="Enviar">
+        </form>
+    </div>
 {% endblock %}

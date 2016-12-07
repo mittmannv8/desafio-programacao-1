@@ -1,11 +1,102 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>Sales Manager</title>
+    <style type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            font-family: Arial;
+            color: #333;
+        }
+
+        header {
+            padding: 10px;
+            background-color: #777;
+            color: white;
+        }
+
+        section.content {
+            padding: 5px;
+            width: 100%;
+            max-width: 960px;
+            margin: auto;
+            margin-top: 50px;
+        }
+
+        section.content .demonstrative {
+            margin: 10px 0;
+        }
+        
+        .currency {
+            color: #15A244;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        small {
+            font-size: 0.7em;
+            color: #666;
+        }
+
+        .file-upload {
+            margin-top: 70px;
+        }
+
+        .file-upload input[type="submit"] {
+            border: none;
+            padding: 10px 20px;
+            background-color: #00A6D7;
+            color: white;
+            font-weight: bold;
+        }
+        .inputfile {
+            margin: 10px 0 20px 0;
+        }
+
+        .messages {
+            width: 100%;
+            max-width: 960px;
+            margin: 30px auto;
+        }
+        .messages li {
+            margin-top: 15px;
+            padding: 20px 30px;
+            color: white;
+            border-radius: 5px;
+        }
+        .messages li.success {
+            background-color: #78d0ad;
+        }
+        .messages li.error {
+            background-color: #d48376;
+        }
+    </style>
 </head>
 <body>
 
-{% block content %}{% endblock %}
+<header>
+    <h1>Sales Manager</h1>
+</header>
+
+
+{% if messages %}
+    <ul class="messages">
+    {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+
+    <section class="content">
+    {% block content %}
+        
+    {% endblock %}
+    </section>
 
 </body>
 </html>

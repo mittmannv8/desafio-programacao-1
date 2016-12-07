@@ -1,5 +1,5 @@
 from django.test import TestCase
-from challenge.apps.sales.models import Sale
+from challenge.apps.sales.models import Sale, Document
 
 
 class SaleTestCase(TestCase):
@@ -11,12 +11,13 @@ class SaleTestCase(TestCase):
            item_price=1.99,
            purchase_count=2,
            merchant_address='Address',
-           merchant_name='Merchant'
+           merchant_name='Merchant',
+           document=Document.objects.create()
         )
 
     def tests_sales_models(self):
         sale = Sale.objects.get(id=1)
-        print(sale)
+
         self.assertEqual(sale.purchaser_name, 'Purchaser')
         self.assertEqual(sale.item_description, 'Description')
         self.assertEqual(sale.merchant_address, 'Address')

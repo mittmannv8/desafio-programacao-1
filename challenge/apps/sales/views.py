@@ -1,33 +1,52 @@
 import operator
 
-from functools import reduce
-from challenge.apps.sales.forms import FileSaleForm
-from challenge.apps.sales.models import Sale
-from django.http import HttpResponse
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views import View
+from functools import reduce
+
+from challenge.apps.sales.models import Document
+from challenge.apps.sales.models import Sale
 
 
 class IndexSales(View):
     def get(self, request):
-        sale_file = FileSaleForm()
+        """
+            Return and template containing the last document sales (if exist)
+            and sum of all sales.
+        """
         sales = Sale.objects.all()
+        last_document = Document.objects.last() or None
 
-        gross_sales = reduce(operator.add, [s.total_price for s in sales])
+        if not last_document:
+            last_gross_sales = 0
+            gross_sales = 0
+        else:
+            last_sales = sales.filter(document=last_document)
+            last_gross_sales = reduce(
+                operator.add,
+                [s.total_price for s in last_sales]
+            )
+            gross_sales = reduce(operator.add, [s.total_price for s in sales])
 
         return render(request, 'sales/index.html', {
             'gross_sales': gross_sales,
-            'form': sale_file
+            'last_gross_sales': last_gross_sales,
+            'last_document': last_document,
         })
 
 
 class NewSalesFile(View):
     def post(self, request, *args, **kwargs):
-        form = FileSaleForm(request.POST, request.FILES)
-
-        if form.is_valid():
+        """
+            Receive a file, parse and save the data on DB.
+        """
+        try:
             file = request.FILES['sales_file']
+
+            document = Document.objects.create()
+
             for index, line in enumerate(file.readlines()):
                 line = line.decode('utf-8')
                 values = line.split('\t')
@@ -40,7 +59,20 @@ class NewSalesFile(View):
                        purchase_count=int(values[3]),
                        merchant_address=values[4],
                        merchant_name=values[5],
+                       document=document
                     )
-            return HttpResponseRedirect('/sales/')
-        else:
-            return HttpResponse('error')
+            document.parse_complete = True
+            document.save()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                'Documento inserido com sucesso'
+            )
+        except:
+            document.delete()
+            messages.add_message(
+                request,
+                messages.ERROR,
+                'Houve um erro ao inserir o documento. Tente novamente mais tarde.'
+            )
+        return HttpResponseRedirect('/sales/')

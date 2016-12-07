@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from django.db import models
 
 
@@ -8,6 +7,10 @@ class Document(models.Model):
         This class is util for grouping sales by file
     """
     created_date = models.DateTimeField(auto_now_add=True)
+    parse_complete = models.NullBooleanField(default=False)
+
+    def __str__(self):
+        return 'Sale: {}'.format(self.id)
 
 
 class Sale(models.Model):
