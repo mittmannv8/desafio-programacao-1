@@ -75,4 +75,4 @@ class NewSalesFile(View):
                 messages.ERROR,
                 'Houve um erro ao inserir o documento. Tente novamente mais tarde.'
             )
-        return HttpResponseRedirect('/sales/')
+        return HttpResponseRedirect('/')

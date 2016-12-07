@@ -1,3 +1,36 @@
+# Resolução do desafio
+O desafio foi resolvido utilizando:
+ -Python 3.4
+ -Django 1.10.4
+
+## Instalação e execução
+Para rodar o projeto, considerando que o ambiente esteja preparado com *Python >3.4*, rode o comando:
+
+    $ make install
+
+ou, caso não tenha o make instalado:
+
+    $ pip install -r requirements.txt
+    $ python manage.py migrate
+
+Para rodar o projeto, basta executar:
+
+    $ make run
+
+ou, caso não tenha o make instalado:
+
+    $ python manage.py runserver
+
+Isso vai rodar o *webserver* buildin do Django, rodando o projeto, em [http://localhost:8000](http://localhost:8000)
+
+## Testes
+Caso queira rodar os testes:
+
+    $ make test
+
+ou:
+    $ python manage.py test
+
 # Desafio de programação 1
 A idéia deste desafio é nos permitir avaliar melhor as habilidades de candidatos à vagas de programador, de vários níveis.
 
